@@ -1,0 +1,84 @@
+﻿<!DOCTYPE html>
+<html lang="es-mx">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="icon" href="~/Assets/Images/WiGoLogo.ico" type="image/x-icon">
+
+    @{
+        if (ViewData["Title"] == null || ViewData["Title"].ToString() == "")
+        {
+            <title>WiGo Internet</title>
+        }
+        else
+        {
+            <title>@ViewData["Title"] - WiGo Internet</title>
+        }
+    }
+
+    <!-- Referencia al CSS de Bootstrap -->
+    @Styles.Render("~/Content/bootstrap")
+
+    <!-- CDN de Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <!-- Referencia al CSS de DataTables -->
+    @Styles.Render("~/Content/datatables")
+
+    <!-- Referencia al custom css -->
+    @if (User.Identity.IsAuthenticated)
+    {
+        @Styles.Render("~/Content/loged-css")
+    }
+    else
+    {
+        @Styles.Render("~/Content/login-css")
+    }
+
+    <!-- Referencia al CSS de Select2 -->
+    @Styles.Render("~/Content/select2")
+
+    @RenderSection("styles", required: false)
+
+</head>
+
+<body>
+    @if (User.Identity.IsAuthenticated)
+    {
+        @Html.Partial("_navbar")
+        @Html.Partial("_sidebar")
+    }
+
+    <main id="content" class="p-4">
+        @RenderBody()
+    </main>
+
+    <footer>
+        @Html.Partial("_footer")
+    </footer>
+
+    <!-- Scripts de jQuery -->
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <!-- Scripts de Bootstrap -->
+    @Scripts.Render("~/bundles/bootstrap")
+
+    @if (User.Identity.IsAuthenticated)
+    {
+        <!-- Script de DataTables -->
+        @Scripts.Render("~/bundles/datatables")
+
+        <!-- Script de Select2 -->
+        @Scripts.Render("~/bundles/select2")
+
+        <!-- Script de Nav Config -->
+        @Scripts.Render("~/bundles/nav-config")
+    }
+
+    @RenderSection("scripts", required: false)
+</body>
+
+</html>

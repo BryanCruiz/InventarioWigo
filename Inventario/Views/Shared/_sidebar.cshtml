@@ -1,0 +1,151 @@
+﻿@{
+    var controllerRoles = ViewBag.ControllerRoles as Dictionary<string, List<string>>;
+    var viewRoles = ViewBag.ViewRoles as Dictionary<string, List<string>>;
+    var submenuRoles = ViewBag.SubmenuRoles as Dictionary<string, List<string>>;
+
+}
+<!-- Sidebar -->
+<div id="sidebar" class="active">
+    <div class="profile">
+        <img src="~/Assets/Images/user-icon.png" alt="Avatar">
+        <div class="username">@User.Identity.Name</div>
+    </div>
+    <div class="menu">
+        <h6>Main</h6>
+        <ul>
+            <li><a href="/Home/Dashboard"><i class="bi bi-house-door"></i> Dashboard</a></li>
+        </ul>
+        <!-- Administrador -->
+        @if (User.IsInRole("root") || controllerRoles["Admin"].Any(role => User.IsInRole(role)))
+        {
+            <h6>Administrador</h6>
+            <ul>
+                @if (User.IsInRole("root") || viewRoles["VisualizarUsuarios"].Any(role => User.IsInRole(role)))
+                {
+                    <li><a href="/Admin/AdministrarUsuarios"><i class="bi bi-people"></i> Usuarios</a></li>
+                }
+                @if (User.IsInRole("root") || viewRoles["VisualizarRoles"].Any(role => User.IsInRole(role)))
+                {
+                    <li><a href="/Admin/Roles"><i class="bi bi-person-badge"></i> Roles</a></li>
+                }
+                @if (User.IsInRole("root") || viewRoles["VisualizarViews"].Any(role => User.IsInRole(role)))
+                {
+                    <li><a href="/Admin/AdministrarViews"><i class="bi bi-toggles"></i> Permisos Módulos</a></li>
+                }
+            </ul>
+        }
+
+        <!-- Finanzas -->
+        @if (User.IsInRole("root") || controllerRoles["Finanzas"].Any(role => User.IsInRole(role)))
+        {
+            <h6>Finanzas</h6>
+            <ul>
+                @if (User.IsInRole("root") || submenuRoles["Finanzas:Clientes"].Any(role => User.IsInRole(role)))
+                {
+                    <!-- Botón con submenú Clientes -->
+                    <li>
+                        <a class="submenu-toggle"><i class="bi bi-people"></i> Clientes <span class="arrow"><i class="bi bi-caret-right-fill"></i></span></a>
+                        <!-- Submenú -->
+                        <ul class="submenu">
+                            @if (User.IsInRole("root") || viewRoles["ImportarClientes"].Any(role => User.IsInRole(role)))
+                            {
+                                <li><a href="@Url.Action("ImportarClientes", "Finanzas")">Importar</a></li>
+                            }
+                            @if (User.IsInRole("root") || viewRoles["VisualizarContratos"].Any(role => User.IsInRole(role)))
+                            {
+                                <li><a href="@Url.Action("ListaContratos", "Finanzas")">Contratos</a></li>
+                            }
+                        </ul>
+                    </li>
+                }
+                @if (User.IsInRole("root") || viewRoles["VisualizarClientes"].Any(role => User.IsInRole(role)))
+                {
+                    <li><a href="@Url.Action("DatosFiscales", "Finanzas")"><i class="bi bi-receipt"></i> Datos Fiscales</a></li>
+                }
+                @if (User.IsInRole("root") || submenuRoles["Finanzas:Productos"].Any(role => User.IsInRole(role)))
+                {
+                    <!-- Botón con submenú Productos -->
+                    <li>
+                        <a class="submenu-toggle"><i class="bi bi-basket2-fill"></i> Productos/Servicios <span class="arrow"><i class="bi bi-caret-right-fill"></i></span></a>
+                        <!-- Submenú -->
+                        <ul class="submenu">
+                            @if (User.IsInRole("root") || viewRoles["VisualizarProductos"].Any(role => User.IsInRole(role)))
+                            {
+                                <li><a href="@Url.Action("ListaProductos", "Finanzas")">Listado</a></li>
+                            }
+                            @if (User.IsInRole("root") || viewRoles["VisualizarAsignacionProducto"].Any(role => User.IsInRole(role)))
+                            {
+                                <li><a href="@Url.Action("ListaAsignacionProductoCliente", "Finanzas")">Asignaciones</a></li>
+                            }
+                        </ul>
+                    </li>
+                }
+                @if (User.IsInRole("root") || viewRoles["VisualizarInvoSplit"].Any(role => User.IsInRole(role)))
+                {
+                    <li><a href="@Url.Action("ListaInvoSplit", "Finanzas")"><i class="bi bi-box-seam-fill"></i> InvoSplits</a></li>
+                }
+                @if (User.IsInRole("root") || submenuRoles["Finanzas:Facturacion"].Any(role => User.IsInRole(role)))
+                {
+                    <!-- Botón con submenú Productos -->
+                    <li>
+                        <a class="submenu-toggle"><i class="bi bi-credit-card"></i> Facturación <span class="arrow"><i class="bi bi-caret-right-fill"></i></span></a>
+                        <!-- Submenú -->
+                        <ul class="submenu">
+                            @if (User.IsInRole("root") || viewRoles["HistorialFacturacion"].Any(role => User.IsInRole(role)))
+                            {
+                                <li><a href="@Url.Action("HistorialFacturacion", "Finanzas")">Historial de Facturación</a></li>
+                            }
+                            @if (User.IsInRole("root") || viewRoles["ComplementosPago"].Any(role => User.IsInRole(role)))
+                            {
+                                <li><a href="@Url.Action("ComplementosPago", "Finanzas")">Registrar Pago</a></li>
+                            }
+                            @if (User.IsInRole("root") || viewRoles["TimbrarFactura"].Any(role => User.IsInRole(role)))
+                            {
+                                <li><a href="@Url.Action("FacturacionPendiente", "Finanzas")">Facturación Pendiente</a></li>
+                            }
+                        </ul>
+                    </li>
+                }
+            </ul>
+        }
+
+        <!-- Recursos Humanos -->
+        @if (User.IsInRole("root") || controllerRoles["RRHH"].Any(role => User.IsInRole(role)))
+        {
+            <h6>Recursos Humanos</h6>
+            <ul>
+                @if (User.IsInRole("root") || viewRoles["VisualizarEmpleados"].Any(role => User.IsInRole(role)))
+                {
+                    <li><a href="/RRHH/ListaEmpleados"><i class="bi bi-person-vcard-fill"></i> Empleados</a></li>
+                }
+            </ul>
+        }
+
+        <!-- Operaciones -->
+        @if (User.IsInRole("root") || controllerRoles["Operaciones"].Any(role => User.IsInRole(role)))
+        {
+            <h6>Operaciones</h6>
+            <ul>
+                @if (User.IsInRole("root") || submenuRoles["Operaciones:Inventario"].Any(role => User.IsInRole(role)))
+                {
+                    <!-- Botón con submenú Catalogo -->
+                    <li>
+                        <a class="submenu-toggle"><i class="bi bi-backpack-fill"></i> Inventario <span class="arrow"><i class="bi bi-caret-right-fill"></i></span></a>
+                        <!-- Submenú -->
+                        <ul class="submenu">
+                            @if (User.IsInRole("root") || viewRoles["VisualizarInventario"].Any(role => User.IsInRole(role)))
+                            {
+                                <li><a href="@Url.Action("ListaCatalogo", "Operaciones")">Dispositivos</a></li>
+                                <li><a href="@Url.Action("ListaConsumible", "Operaciones")">Consumibles</a></li>
+                                <li><a href="@Url.Action("ListaHerramientas", "Operaciones")">Herramientas</a></li>
+                                <li><a href="@Url.Action("AsignacionInventario", "Operaciones")">Asignaciones de Inventario</a></li>
+                                <li><a href="@Url.Action("ListaAsignHerramienta", "Operaciones")">Asignaciones de Herramientas</a></li>
+                            }
+                        </ul>
+                    </li>
+                }
+
+            </ul>
+        }
+    </div>
+</div>
