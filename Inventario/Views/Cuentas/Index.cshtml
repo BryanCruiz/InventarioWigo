@@ -1,7 +1,10 @@
 ﻿@{
     ViewData["Title"] = "Cuentas Móviles";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    Inventario.WiGoServiceReference.WiGoServiceClient data = new Inventario.WiGoServiceReference.WiGoServiceClient();
+    var cuentas = ViewBag.MobileAccount as List<dynamic>;
 }
+
 
 <!-- Bootstrap Icons -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
@@ -16,46 +19,52 @@
         Agregar Nueva Cuenta
     </button>
 
+
+    <!-- Mostrar mensaje de error si existe -->
+    @if (ViewBag.Error != null)
+    {
+        <div class="alert alert-danger">
+            <strong>Error:</strong> @ViewBag.Error
+        </div>
+    }
     <!-- Tabla de cuentas móviles -->
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th><i class="bi bi-person-bounding-box"></i> ID</th>
-                <th><i class="bi bi-envelope-fill"></i> Email</th>
-                <th><i class="bi bi-box-arrow-in-right"></i> Contraseña</th>
-                <th><i class="bi bi-telephone-fill"></i> Teléfono Recuperación</th>
-                <th><i class="bi bi-envelope-arrow-down-fill"></i> Email Recuperación</th>
-                <th><i class="bi bi-pen-fill"></i> Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>001</td>
-                <td>correo@mail.com</td>
-                <td>
-                    <div class="input-group">
-                        <input type="password" class="form-control" value="ContraseñaA" id="password1" disabled>
-                        <button class="btn btn-outline-secondary" type="button" onclick="toggleVisibility('password1', this)">
-                            <i class="bi bi-eye"></i>
-                        </button>
-                    </div>
-                </td>
-                <td>45452244</td>
-                <td>
-                    <div class="input-group">
-                        <input type="password" class="form-control" value="correo@recuperacion.com" id="emailRec1" disabled>
-                        <button class="btn btn-outline-secondary" type="button" onclick="toggleVisibility('emailRec1', this)">
-                            <i class="bi bi-eye"></i>
-                        </button>
-                    </div>
-                </td>
-                <td>
-                    <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#modalEditarCuenta">Editar</button>
-                    <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#modalEliminarCuenta">Eliminar</button>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+    @if (ViewBag.MobileAccount != null && ViewBag.MobileAccount.Any())
+    {
+
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Email</th>
+                    <th>Contraseña</th>
+                    <th>Teléfono Recuperación</th>
+                    <th>Email Recuperación</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var account in ViewBag.MobileAccount)
+                {
+                    <tr>
+                        <td>@account.ID_MobileAccount</td>
+                        <td>@account.Gmail</td>
+                        <td>@account.Password</td>
+                        <td>@account.Mobile_Recovery</td>
+                        <td>@account.Gmail_Recovery</td>
+                        <td>
+                            <button class="btn btn-warning btn-sm">Editar</button>
+                            <button class="btn btn-danger btn-sm">Eliminar</button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p>No hay cuentas disponibles.</p>
+    }
+
 </div>
 
 <!-- Modal para eliminar cuenta -->
